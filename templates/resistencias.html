@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<br>
+<div class="container">
+    <div style="background: url(../static/img/Protoboard.png); width: 70%; margin: 0 auto;">
+        <br>
+        <div style="background: rgba(208, 211, 212, 0.5); width: 100%;">
+            <h1 style="text-align: center;">Calculadora De Resistencias</h1>
+        </div>
+        <br>
+    </div>
+    <br>
+    {% from "_macros.html" import render_field %}
+    <form action="" method="post" novalidate>
+        <div>
+            <div class="container text-center" style="width: 95%;">
+                <div class="row align-items-start">
+                    <div class="col" style="border: 2px solid #17202A; border-radius: 5px;">
+                        <br><br>
+                    <!-- Imagen de la tabla de colores de las resistencias -->
+                        <img src="../static/img/Tabla.jpg" alt="" style="width: 50%;">
+                        <br><br>
+                    </div>
+                    <div class="col" style="border: 2px solid #17202A; border-radius: 5px;">
+                        <!-- Opciones para hacer el calculo de las resistencias -->
+                        {{ render_field(form.banda_uno) }}
+                        <br>
+                        {{ render_field(form.banda_dos) }}
+                        <br>
+                        {{ render_field(form.multiplicador) }}
+                        <br>
+                        {{ render_field(form.tolerancia) }}
+                    </div>
+                </div>
+              </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
