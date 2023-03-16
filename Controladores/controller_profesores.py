@@ -1,4 +1,5 @@
 from db import get_conexion
+import json
 
 def insert(nombre, apellidos, email, especialidad, sueldo):
     ok = ''
@@ -29,10 +30,11 @@ def update(id,nombre, apellidos, email, especialidad, sueldo):
         print("Error al agregar al profesor")
         
 def delete(id):
+    print(id)
     try:
-        conn = get_conexion
+        conn = get_conexion()
         with conn.cursor() as cursor:
-            cursor.callproc('delete_teacher', args=(id,))
+            cursor.execute('call eliminar_profesor('+ str(id) +')')
             conn.commit()
         conn.close()
         print('El profesor fue correctamente eliminado')
@@ -43,71 +45,28 @@ def get_all():
     try:
         conn = get_conexion()
         with conn.cursor() as cursor:
-            cursor.callproc('search_profesor', args="")
+            cursor.callproc('get_all_profesor')
             resultset = cursor.fetchall()
-            profesores = []
-            for row in resultset:
-                profesor = {
-                    'id': row[0],
-                    'nombre': row[1],
-                    'apellidos': row[2],
-                    'email': row[3],
-                    'especialidad': row[4],
-                    'sueldo': row[5],
-                    'created_date': row[6].strftime('%Y-%m-%d %H:%M:%S')
-                }
-                profesores.append(profesor)
+
         conn.close()
-        return profesores
+        return resultset
     except Exception as ex:
         print('Error al obtener a los profesores:', ex)
         
-def search_id(id=None):
+def search(word):
     try:
         conn = get_conexion()
         with conn.cursor() as cursor:
-            if id:
-                cursor.execute('search_profesor_id', args=(id))
+            if int(word) / 1 == int(word):
+                cursor.execute('call search_profesor_id('+ str(word) +')')
             else:
-                cursor.execute('search_profesor', args="")
+                print('Entro Aqui')
+                cursor.callproc('call search_profesor('+ str(word) +')')
             resultset = cursor.fetchall()
-            profesores = []
-            for row in resultset:
-                profesor = {
-                    'id': row[0],
-                    'nombre': row[1],
-                    'apellidos': row[2],
-                    'email': row[3],
-                    'especialidad': row[4],
-                    'sueldo': row[5],
-                    'created_date': row[6].strftime('%Y-%m-%d %H:%M:%S')
-                }
-                profesores.append(profesor)
+            print(resultset)
         conn.close()
-        return profesores
+        return resultset
     except Exception as ex:
         print('Error al buscar profesores:', ex)
         
-def search(word):
-    try:
-        conn = get_conexion() 
-        with conn.cursor() as cursor:
-            cursor.callproc('search_profesor', args=(word,))
-            resultset = cursor.fetchall()
-            profesores = []
-            for row in resultset:
-                profesor = {
-                    'id': row[0],
-                    'nombre': row[1],
-                    'apellidos': row[2],
-                    'email': row[3],
-                    'especialidad': row[4],
-                    'sueldo': row[5],
-                    'created_date': row[6].strftime('%Y-%m-%d %H:%M:%S')
-                }
-                profesores.append(profesor)
-        conn.close()
-        return profesores
-    except Exception as ex:
-        print('Error al buscar los profesores:', ex)
-        return None
+        
