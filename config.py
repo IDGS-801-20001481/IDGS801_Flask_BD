@@ -1,8 +1,10 @@
 import os
 
 from sqlalchemy import create_engine
+from decouple import config
 
 import urllib
+import pymysql
 
 class Config(object):
     SECRET_KEY = 'MY_SECRET_KEY'
